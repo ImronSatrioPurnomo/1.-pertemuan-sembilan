@@ -218,4 +218,3 @@ if __name__ == '__main__':
     root.title('Break those Bricks!')
     game = Game(root)
     game.mainloop()
-
