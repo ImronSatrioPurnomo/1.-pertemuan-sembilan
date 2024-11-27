@@ -24,7 +24,7 @@ class Ball(GameObject):
         self.speed = 5
         item = canvas.create_oval(x - self.radius, y - self.radius,
                                   x + self.radius, y + self.radius,
-                                  fill='white')
+                                  fill='black')  # change color to black
         super(Ball, self).__init__(canvas, item)
 
     def update(self):
@@ -121,7 +121,7 @@ class Game(tk.Frame):
         self.lives = 3
         self.width = 640
         self.height = 360
-        self.canvas = tk.Canvas(self, bg='#D6D1F5',
+        self.canvas = tk.Canvas(self, bg='#87CEEB',  # change background to sky blue
                                 width=self.width,
                                 height=self.height,)
         self.canvas.pack()
@@ -150,6 +150,7 @@ class Game(tk.Frame):
                          lambda _: self.ball.bounce_right())
         self.canvas.bind('<w>',
                          lambda _: self.ball.bounce_up())
+        self.canvas.bind('<r>', lambda _: self.restart_game())
 
     def setup_game(self):
         self.add_ball()
@@ -194,12 +195,12 @@ class Game(tk.Frame):
         num_bricks = len(self.canvas.find_withtag('brick'))
         if num_bricks == 0:
             self.ball.speed = None
-            self.draw_text(320, 180, 'You win! You the Breaker of Bricks.')
+            self.draw_text(320, 180, 'gila, lo menang! tumben jago.', size='20')
         elif self.ball.get_position()[3] >= self.height:
             self.ball.speed = None
             self.lives -= 1
             if self.lives < 0:
-                self.draw_text(320, 180, 'You Lose! Game Over!')
+                self.draw_text(320, 180, 'Lo kalah, coba lagi. cupu amat!', size='20')
             else:
                 self.after(1000, self.setup_game)
         else:
@@ -211,6 +212,12 @@ class Game(tk.Frame):
         items = self.canvas.find_overlapping(*ball_coords)
         objects = [self.items[x] for x in items if x in self.items]
         self.ball.collide(objects)
+
+    def restart_game(self):
+        self.lives = 3
+        for item in self.canvas.find_all():
+            self.canvas.delete(item)
+        self.setup_game()
 
 
 if __name__ == '__main__':
